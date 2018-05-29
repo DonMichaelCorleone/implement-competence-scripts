@@ -1,0 +1,25 @@
+version: "3.2"
+services:
+  apache-service:
+    build:
+      context: './docker/docker-apache'
+    ports:
+      - 80:80
+      - 443:443
+    working_dir: /var/www/reader-docker.squarembs.com/www/
+    volumes:
+        - .:/var/www/reader-docker.squarembs.com/www/
+        - /var/www/reader-docker.squarembs.com/sessions
+        - ./docker/install/httpd/ssl.crt:/var/www/reader-docker.squarembs.com/
+        - ./docker/install/httpd/conf.d/sites.d:/etc/httpd/conf.d/sites.d/
+        - ./docker/install/httpd/conf/:/etc/httpd/conf/
+        - ./docker/install/config/:/var/www/reader-docker.squarembs.com/www/config
+        - ./docker/install/data/:/var/www/reader-docker.squarembs.com/www/data
+  mysql-service:
+    image: mariadb
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker/install/db:/docker-entrypoint-initdb.d
+    environment:
+#has been removed for privacy purposes
